@@ -1,5 +1,7 @@
 # vue-curve
 
+vue-curve of echarts
+
 ## Project setup
 ```
 yarn install
