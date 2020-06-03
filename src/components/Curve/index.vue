@@ -9,9 +9,10 @@
 /**
  * Vue Curve
  */
-import echarts from "echarts/lib/echarts";
-import "echarts/lib/chart/line";
-import "echarts/lib/component/tooltip";
+import echarts from "echarts";
+// import echarts from "echarts/lib/echarts";
+// import "echarts/lib/chart/line";
+// import "echarts/lib/component/tooltip";
 import GetOption from "./utils/GetOption";
 
 import Legend from "./Legend";
@@ -35,8 +36,14 @@ export default {
         localData: []
     }),
     mounted() {
-        this.init();
-        this.handleResize();
+        if (echarts) {
+            this.init();
+            this.handleResize();
+        } else {
+            console.warn(
+                "[ku-curve warn]: Depends on `echarts`, please install `echarts`."
+            );
+        }
     },
     methods: {
         init() {

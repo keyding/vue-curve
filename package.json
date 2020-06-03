@@ -1,11 +1,21 @@
 {
-  "name": "vue-curve",
+  "name": "@kuyun/ku-curve",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "main": "lib/ku-curve.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build --target lib --name ku-curve --dest lib src/components/Curve/index.vue"
   },
+  "keywords": [
+    "kuyun",
+    "ku-curve",
+    "curve"
+  ],
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
   "dependencies": {
     "core-js": "^3.6.5",
     "echarts": "^4.8.0",
