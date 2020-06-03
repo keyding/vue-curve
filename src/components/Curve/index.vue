@@ -1,5 +1,8 @@
 <template>
-    <div class="curve" ref="curve"></div>
+    <div class="curve-wrapper">
+        <Legend :data="legends" @on-change="handleLegendChange" @on-remove="handleLegendRemove"></Legend>
+        <div class="curve" ref="curve"></div>
+    </div>
 </template>
 
 <script>
@@ -9,84 +12,134 @@
 import echarts from "echarts/lib/echarts";
 import "echarts/lib/chart/line";
 import "echarts/lib/component/tooltip";
+import GetOption from "./utils/GetOption";
 
-const OPTION = {
-    title: {
-        text: "折线图堆叠"
-    },
-    tooltip: {
-        trigger: "axis"
-    },
-    legend: {
-        data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"]
-    },
-    grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "3%",
-        containLabel: true
-    },
-    toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
-    },
-    xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-    },
-    yAxis: {
-        type: "value"
-    },
-    series: [
-        {
-            name: "邮件营销",
-            type: "line",
-            stack: "总量",
-            data: [120, 132, 101, 134, 90, 230, 210]
-        },
-        {
-            name: "联盟广告",
-            type: "line",
-            stack: "总量",
-            data: [220, 182, 191, 234, 290, 330, 310]
-        },
-        {
-            name: "视频广告",
-            type: "line",
-            stack: "总量",
-            data: [150, 232, 201, 154, 190, 330, 410]
-        },
-        {
-            name: "直接访问",
-            type: "line",
-            stack: "总量",
-            data: [320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-            name: "搜索引擎",
-            type: "line",
-            stack: "总量",
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }
-    ]
-};
+import Legend from "./Legend";
 
 export default {
     name: "VueCureve",
+    props: {
+        data: {
+            type: Array,
+            default: () => []
+        },
+        tooltip: {
+            type: Function
+        }
+    },
+    components: {
+        Legend
+    },
+    data: () => ({
+        legends: [],
+        localData: []
+    }),
     mounted() {
-        this.echartIns = echarts.init(this.$refs.curve);
-        this.echartIns.setOption(OPTION);
+        this.init();
+        this.handleResize();
+    },
+    methods: {
+        init() {
+            this.localData = this.data.map(item =>
+                Object.assign({ hide: false }, { ...item })
+            );
+
+            if (this.localData.length) {
+                this.initEcharts();
+                this.updateLegends();
+                this.updateOption();
+            } else {
+                this.destoryEcharts();
+            }
+        },
+        initEcharts() {
+            this.echartIns = this.echartIns || echarts.init(this.$refs.curve);
+        },
+        destoryEcharts() {
+            this.echartIns && this.echartIns.destory();
+            this.echartIns = null;
+        },
+        // 处理页面 resize 时，图表自适应缩放
+        handleResize() {
+            window.addEventListener("resize", this.bindEchartsResize);
+
+            this.$once("hook:beforeDestroy", () => {
+                window.removeEventListener("resize", this.bindEchartsResize);
+            });
+        },
+        bindEchartsResize() {
+            this.echartIns && this.echartIns.resize();
+        },
+        updateOption() {
+            const _legends =
+                this.legends ||
+                [
+                    ...new Set(this.localData.map(({ legend }) => legend))
+                ].map(label => ({ label }));
+
+            const xAxis = [
+                ...new Set(this.localData.map(({ xAxis }) => xAxis))
+            ];
+
+            const yAxis = _legends.map(({ label }) => ({
+                legend: label,
+                data: this.localData
+                    .filter(item => !item.hide && item.legend === label)
+                    .map(({ yAxis }) => yAxis)
+            }));
+
+            const option = GetOption(xAxis, yAxis); //tooltip
+
+            if (this.tooltip) {
+                option.tooltip.formatter = this.tooltip;
+            }
+
+            this.echartIns && this.echartIns.setOption(option, true);
+        },
+        updateLegends(data) {
+            this.legends =
+                data ||
+                [
+                    ...new Set(this.localData.map(({ legend }) => legend))
+                ].map(label => ({ label }));
+        },
+        // 图例选中切换
+        handleLegendChange(legends) {
+            const filterLegends = legends.filter(({ selected }) => selected);
+            const legendLabels = filterLegends.map(({ label }) => label);
+
+            this.localData.forEach(item => {
+                const { legend } = item;
+                item.hide = !legendLabels.includes(legend);
+            });
+
+            this.updateOption();
+        },
+        // 图例删除
+        handleLegendRemove(item, legends) {
+            const { label } = item;
+
+            this.updateLegends(legends);
+
+            this.localData = this.localData.filter(
+                ({ legend }) => legend !== label
+            );
+
+            this.updateOption();
+        }
     }
 };
 </script>
 
 <style lang="scss" scoped>
-.curve {
+.curve-wrapper {
     width: 100%;
-    min-height: 400px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+
+    .curve {
+        width: 100%;
+        min-height: 360px;
+        box-sizing: border-box;
+    }
 }
 </style>
