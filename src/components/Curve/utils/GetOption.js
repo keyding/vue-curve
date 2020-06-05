@@ -7,13 +7,14 @@ export default function (xAxis = [], series = []) {
         tooltip: {
             trigger: "axis",
             backgroundColor: "#322F4B",
-            padding: [12, 17],
+            padding: 0,
             axisPointer: {
                 lineStyle: {
                     color: LINE_COLOR
                 }
             },
-            transitionDuration: 0
+            confine: true,
+            enterable: true,
         },
         grid: {
             left: "3%",

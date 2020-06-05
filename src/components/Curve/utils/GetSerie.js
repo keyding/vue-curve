@@ -7,7 +7,7 @@ const SERIE_BASE_CONFIG = {
     showSymbol: false,
     lineStyle: {
         width: 2
-    }
+    },
 };
 
 export default (serie) => {

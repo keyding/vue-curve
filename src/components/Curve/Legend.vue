@@ -7,7 +7,7 @@
                 v-for="(item, index) in list"
                 :key="index"
             >
-                <span class="icon" :class="['icon-active-' + ((index + 1) % 11)]"></span>
+                <span class="icon" :class="['icon-active-' + (index % 11 + 1)]"></span>
                 <span class="text" @click="handleLegendClick(item)">{{ item.label }}</span>
                 <span class="close-icon" @click="handleLegendRemove(item)"></span>
             </div>
