@@ -2941,7 +2941,7 @@ ecc-jsbn@~0.1.1:
 
 echarts@^4.8.0:
   version "4.8.0"
-  resolved "http://r.cnpmjs.org/echarts/download/echarts-4.8.0.tgz#b2c1cfb9229b13d368ee104fc8eea600b574d4c4"
+  resolved "https://r.cnpmjs.org/echarts/download/echarts-4.8.0.tgz#b2c1cfb9229b13d368ee104fc8eea600b574d4c4"
   integrity sha1-ssHPuSKbE9No7hBPyO6mALV01MQ=
   dependencies:
     zrender "4.3.1"
@@ -6016,9 +6016,9 @@ qs@6.7.0:
   integrity sha1-QdwaAV49WB8WIXdr4xr7KHapsbw=
 
 qs@~6.5.2:
-  version "6.5.2"
-  resolved "https://registry.npm.taobao.org/qs/download/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
-  integrity sha1-yzroBuh0BERYTvFUzo7pjUA/PjY=
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.3.tgz#3aeeffc91967ef6e35c0e488ef46fb296ab76aad"
+  integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
 query-string@^4.1.0:
   version "4.3.4"
@@ -7794,5 +7794,5 @@ yargs@^15.0.0:
 
 zrender@4.3.1:
   version "4.3.1"
-  resolved "http://r.cnpmjs.org/zrender/download/zrender-4.3.1.tgz#baf8aa6dc8187a2f819692d7d5f9bedfa2b90fa3"
+  resolved "https://r.cnpmjs.org/zrender/download/zrender-4.3.1.tgz#baf8aa6dc8187a2f819692d7d5f9bedfa2b90fa3"
   integrity sha1-uviqbcgYei+BlpLX1fm+36K5D6M=
